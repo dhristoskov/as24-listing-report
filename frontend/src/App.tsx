@@ -7,7 +7,7 @@ function App() {
   useEffect(() => {
     axios.get('/listings')
          .then(res => {
-           console.log(res);
+           console.log(res.data);
          })
   })
   return (
