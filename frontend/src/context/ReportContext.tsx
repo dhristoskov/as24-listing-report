@@ -27,7 +27,7 @@ const ReportContextProvider: React.FC<Props> = ({ children }) => {
     const [ percentage, setPercentage ] = useState<PercentSells[]>([] as PercentSells[]);
     const [ mostContacted, setMostContacted ] = useState<MostContacted>({} as MostContacted);
     const [ topSellers, setTopSellers ] = useState<TopSellersPerMonth[]>([] as TopSellersPerMonth[]);
-    const [ loading, setLoading ] = useState<boolean>(true)
+    const [ loading, setLoading ] = useState<boolean>(false)
 
     useEffect(() => {
         setLoading(true);

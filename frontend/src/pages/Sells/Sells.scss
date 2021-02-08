@@ -1,0 +1,54 @@
+.sells-wrapper{
+    width: 100%;
+    margin-top: 30px;
+    &-contact {
+        width: 30%;
+        margin: auto;
+        border: 1px solid black;
+        &__header {
+            border-bottom: 1px solid black;
+            padding: 2px 10px;
+        }
+        &__title {
+            border-bottom: 1px solid black;
+            text-align: center;
+            background-color: cadetblue;
+        }
+        &__item {
+            padding: 2px 10px;
+        }
+    }
+    &-sellers {
+        width: 65%;
+        margin: 30px auto;
+        
+        &__title {
+            border: 1px solid black;
+            text-align: center;
+            background-color: cadetblue;
+        }
+
+        &__month {
+            padding: 5px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        &__header, &__container {
+            display: flex;
+            &-item {
+                width: 17%;
+                padding: 5px;
+            }
+            &-month {
+                display: block;
+                width: 100%;
+                padding: 2px 10px;
+            }
+        }
+
+        &__header {
+            border: 1px solid black;
+        }
+    }
+}
