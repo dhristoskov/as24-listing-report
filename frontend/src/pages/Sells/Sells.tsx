@@ -9,14 +9,13 @@ import './Sells.scss';
 
 const SellsPage = () => {
 
-    const { mostContacted, topSellers, loading } = useContext(ReportContext)
+    const { mostContacted, topSellers } = useContext(ReportContext);
 
     return (
         <Fragment>
             {
-                loading 
-                ? <Loader />
-                : <div className='sells-wrapper'>
+                ( mostContacted && topSellers.length > 0 )
+                ? <div className='sells-wrapper'>
                     <div className='sells-wrapper-contact'>
                         <h4 className='sells-wrapper-contact__title'>Average price of the 30% most contacted listings</h4>
                         <p className='sells-wrapper-contact__header'>Average price</p>
@@ -57,6 +56,7 @@ const SellsPage = () => {
                     }
                     </div>
                 </div>
+                : <Loader />
             }
         </Fragment>
     )

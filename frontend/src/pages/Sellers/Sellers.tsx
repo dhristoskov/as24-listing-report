@@ -10,14 +10,13 @@ import './Sellers.scss'
 
 const SellersPage = () => {
 
-    const { avarageSellers, percentage, loading } = useContext(ReportContext)
+    const { avarageSellers, percentage } = useContext(ReportContext);
 
     return (
         <Fragment>
             {
-                loading 
-                ? <Loader />
-                : <div className='seller-wrapper'>
+                ( avarageSellers.length > 0 && percentage.length > 0 )
+                ? <div className='seller-wrapper'>
                     <div className='seller-wrapper-avg'>
                         <h4 className='seller-wrapper-avg__title'>Average Listing Selling Price per Seller Type</h4>
                         <div className='seller-wrapper-avg__header'>
@@ -51,6 +50,7 @@ const SellersPage = () => {
                         }
                     </div>
                 </div>
+                : <Loader />
             }
         </Fragment>
     )

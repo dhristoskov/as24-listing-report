@@ -16,6 +16,7 @@ const findFiveTopSellers = () => {
     const options = { month : 'numeric', year: 'numeric'};
     const convertedTime: ContactItem[] = [];
     const topSellersPerMonth: TopSellersPerMonth[] = [];
+    
     contactArray.forEach(item => {
         convertedTime.push({
             listing_id: item.listing_id,
