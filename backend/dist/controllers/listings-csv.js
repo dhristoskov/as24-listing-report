@@ -58,7 +58,7 @@ const getAvaragePriceAndPercentage = (req, res) => {
         .on('end', () => {
         const avarageSellers = avaragePriceCalculation();
         const percentage = carTypesPercent();
-        res.status(201).json({ listings: avarageSellers, percentage });
+        res.status(201).json({ avarageSellers, percentage });
     });
 };
 exports.getAvaragePriceAndPercentage = getAvaragePriceAndPercentage;

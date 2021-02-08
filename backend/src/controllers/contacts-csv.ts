@@ -6,6 +6,7 @@ import { ListingItem } from '../models/listingItem';
 import { ContactItem } from '../models/contactItem';
 import { createFilePath } from '../helpers/filePath';
 import { TopSellersPerMonth } from '../models/topSellerPerMonth';
+import { MostContacted } from '../models/mostContacted';
 
 let listingsArray: ListingItem [] = [];
 let contactArray: ContactItem [] = [];
@@ -14,7 +15,7 @@ let contactArray: ContactItem [] = [];
 const findFiveTopSellers = () => {
     const options = { month : 'numeric', year: 'numeric'};
     const convertedTime: ContactItem[] = [];
-    const sellersPerMonths: any[] = [];
+    const topSellersPerMonth: TopSellersPerMonth[] = [];
     contactArray.forEach(item => {
         convertedTime.push({
             listing_id: item.listing_id,
@@ -29,31 +30,27 @@ const findFiveTopSellers = () => {
         const topItemsForMonth = sortByMonth.reduce((acc, val) => acc.set(val.listing_id, 1 + (acc.get(val.listing_id) || 0)), new Map());
         const topFiveSellers = Array.from(topItemsForMonth).sort((a, b) => b[1] - a[1]).slice(0, 5);
 
-        const topSellersPerMonth: TopSellersPerMonth[] = [];
-
         topFiveSellers.forEach((seller, index )=> {
             const item = listingsArray.find(listing => listing.id === seller[0]);
-            topSellersPerMonth.push({
-                ranking: index + 1,
-                listing_id: seller[0],
-                make: item?.make || '',
-                selling_price: item?.price || '',
-                mileage: item?.mileage || '',
-                totalContacts: seller[1]
-            });
-        });
-
-        sellersPerMonths.push({
-            month: dataToSearch,
-            ...topSellersPerMonth
+            if(item){
+                topSellersPerMonth.push({
+                    month: dataToSearch,
+                    ranking: index + 1,
+                    listing_id: seller[0],
+                    make: item.make,
+                    selling_price: item.price,
+                    mileage: item.mileage,
+                    totalContacts: seller[1]
+                });
+            }
         });
     });
 
-    return sellersPerMonths;
+    return topSellersPerMonth.sort((a, b) => parseInt(a.month) - parseInt(b.month));
 }
 
 //Find most contacted sellers
-const calculateMostContacted = () => {
+const calculateMostContacted = (): MostContacted => {
     const mostContacted = contactArray.reduce((acc, val) => acc.set(val.listing_id, 1 + (acc.get(val.listing_id) || 0)), new Map());
     const sortedContacts = Array.from(mostContacted).sort((a, b) => b[1] - a[1]);
     const firstThirty = sortedContacts.slice(0, Math.trunc((30/ 100) * sortedContacts.length));
@@ -66,7 +63,7 @@ const calculateMostContacted = () => {
         };
     });
 
-    const mostContactedAvarage = {
+    const mostContactedAvarage: MostContacted = {
         avaragePrice: Math.trunc(totalPrice/ firstThirty.length)
     };
 
@@ -97,7 +94,7 @@ export const getSellersInfo = (req: Request, res: Response) => {
             }  
     })
         .on('end', () => {
-            const mostContacted = calculateMostContacted();
+            const mostContacted: MostContacted = calculateMostContacted();
             const topSellers = findFiveTopSellers();
             res.status(201).json({ mostContacted, topSellers});
     });

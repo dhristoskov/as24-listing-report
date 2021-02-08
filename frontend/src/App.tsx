@@ -1,19 +1,34 @@
-import React, { useEffect } from 'react';
+import React, { Fragment, useContext } from 'react';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
-import axios from './axios';
+import Navigation from './components/Navigation/Navigation';
+import SellersPage from './pages/Sellers/Sellers';
+import SellsPage from './pages/Sells/Sells';
+
+import './App.scss'
+import ReportContextProvider, { ReportContext } from './context/ReportContext';
+import Loader from './components/Loader/Loader';
 
 function App() {
 
-  useEffect(() => {
-    axios.get('/listings')
-         .then(res => {
-           console.log(res.data);
-         })
-  })
+  const { loading } = useContext(ReportContext);
+
   return (
-    <div className="App">
-      Hello React
-    </div>
+    <Fragment>
+      <Router>
+        <ReportContextProvider>
+            <Navigation />
+            {
+              loading ? <Loader />
+              : <Switch>
+                  <Route path='/sellers' component={SellersPage} />
+                  <Route path='/sells' component={SellsPage} />
+                  <Redirect to='/'/>
+                </Switch>
+            }
+        </ReportContextProvider>  
+      </Router>    
+    </Fragment>
   );
 }
 

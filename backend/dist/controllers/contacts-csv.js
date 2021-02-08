@@ -13,7 +13,7 @@ let contactArray = [];
 const findFiveTopSellers = () => {
     const options = { month: 'numeric', year: 'numeric' };
     const convertedTime = [];
-    const sellersPerMonths = [];
+    const topSellersPerMonth = [];
     contactArray.forEach(item => {
         convertedTime.push({
             listing_id: item.listing_id,
@@ -25,21 +25,22 @@ const findFiveTopSellers = () => {
         const sortByMonth = convertedTime.filter(element => element.contact_date === dataToSearch);
         const topItemsForMonth = sortByMonth.reduce((acc, val) => acc.set(val.listing_id, 1 + (acc.get(val.listing_id) || 0)), new Map());
         const topFiveSellers = Array.from(topItemsForMonth).sort((a, b) => b[1] - a[1]).slice(0, 5);
-        const topSellersPerMonth = [];
         topFiveSellers.forEach((seller, index) => {
             const item = listingsArray.find(listing => listing.id === seller[0]);
-            topSellersPerMonth.push({
-                ranking: index + 1,
-                listing_id: seller[0],
-                make: (item === null || item === void 0 ? void 0 : item.make) || '',
-                selling_price: (item === null || item === void 0 ? void 0 : item.price) || '',
-                mileage: (item === null || item === void 0 ? void 0 : item.mileage) || '',
-                totalContacts: seller[1]
-            });
+            if (item) {
+                topSellersPerMonth.push({
+                    month: dataToSearch,
+                    ranking: index + 1,
+                    listing_id: seller[0],
+                    make: item.make,
+                    selling_price: item.price,
+                    mileage: item.mileage,
+                    totalContacts: seller[1]
+                });
+            }
         });
-        sellersPerMonths.push(Object.assign({ month: dataToSearch }, topSellersPerMonth));
     });
-    return sellersPerMonths;
+    return topSellersPerMonth.sort((a, b) => parseInt(a.month) - parseInt(b.month));
 };
 //Find most contacted sellers
 const calculateMostContacted = () => {

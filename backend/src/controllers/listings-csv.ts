@@ -4,7 +4,7 @@ import fs from 'fs';
 
 import { ListingItem } from '../models/listingItem';
 import { AvarageSellerPrice } from '../models/avarageSellerPrice';
-import { percentSells } from '../models/percentSells';
+import { PercentSells } from '../models/percentSells';
 import { createFilePath } from '../helpers/filePath';
 
 let listingsArray: ListingItem [] = [];
@@ -34,12 +34,12 @@ const avaragePrice = (sellerType: string): AvarageSellerPrice => {
 };
 
 //Calculate sells per car maker
-const carTypesPercent = (): percentSells[] => {
-    const percentSells: percentSells[] = [];
+const carTypesPercent = (): PercentSells[] => {
+    const percentSells: PercentSells[] = [];
     const makersCount = listingsArray.reduce((acc, val) => acc.set(val.make, 1 + (acc.get(val.make) || 0)), new Map());
     const totalSells: number = Array.from(makersCount).map(item => parseInt(item[1])).reduce((acc: number, val: number) => acc + val, 0);
     Array.from(makersCount).forEach((element, index) => {
-        const percentItem: percentSells = {
+        const percentItem: PercentSells = {
             id: index,
             make: element[0],
             percent: Math.trunc((100 * element[1]) / totalSells)
@@ -64,8 +64,8 @@ export const getAvaragePriceAndPercentage = (req: Request, res: Response) => {
             }  
     })
         .on('end', () => {
-            const avarageSellers = avaragePriceCalculation()
-            const percentage = carTypesPercent();
-            res.status(201).json({ listings: avarageSellers, percentage});
+            const avarageSellers: AvarageSellerPrice[] = avaragePriceCalculation()
+            const percentage: PercentSells [] = carTypesPercent();
+            res.status(201).json({ avarageSellers, percentage});
     }); 
 };
