@@ -12,7 +12,7 @@ let listingsArray: ListingItem [] = [];
 let contactArray: ContactItem [] = [];
 
 //Find top 5 for a month
-const findFiveTopSellers = () => {
+const findFiveTopSellers = (): TopSellersPerMonth[] => {
     const options = { month : 'numeric', year: 'numeric'};
     const convertedTime: ContactItem[] = [];
     const topSellersPerMonth: TopSellersPerMonth[] = [];
@@ -96,7 +96,7 @@ export const getSellersInfo = (req: Request, res: Response) => {
     })
         .on('end', () => {
             const mostContacted: MostContacted = calculateMostContacted();
-            const topSellers = findFiveTopSellers();
+            const topSellers: TopSellersPerMonth[] = findFiveTopSellers();
             res.status(201).json({ mostContacted, topSellers});
     });
 }
