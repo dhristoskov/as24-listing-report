@@ -8,12 +8,15 @@ const app = express();
 
 app.use(bodyParser.json());
 
+//Upload csv file
 app.use('upload/csv', express.static(path.join('upload', 'csv')))
 
+//Error-handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     res.status(500).json({message: err.message});
 });
 
+//CORS headers middleware
 app.use((req: Request, res: Response, next: NextFunction) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader(

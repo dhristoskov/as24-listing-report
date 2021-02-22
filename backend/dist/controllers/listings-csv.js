@@ -11,6 +11,7 @@ let listingsArray = [];
 //Avarage price sellers in one array
 const avaragePriceCalculation = () => {
     let sellerArray = [];
+    //Create a Set to avoid duplication in seller types
     const sellers = new Set(listingsArray.map(item => item.seller_type));
     Array.from(sellers).forEach((element) => {
         sellerArray.push(avaragePrice(element));
@@ -19,7 +20,9 @@ const avaragePriceCalculation = () => {
 };
 //Single avarage seller price calculating
 const avaragePrice = (sellerType) => {
+    //Filter all entries by sellers type
     const sellers = listingsArray.filter(seller => seller.seller_type === sellerType);
+    //Calculate all sells by sellers type and divided by sellers count
     const avaragePrice = sellers.map(item => parseInt(item.price))
         .reduce((a, b) => a + b, 0) / sellers.length;
     const avarageSellerPrice = {
@@ -31,7 +34,10 @@ const avaragePrice = (sellerType) => {
 //Calculate sells per car maker
 const carTypesPercent = () => {
     const percentSells = [];
+    //Create set and reduce all car makes 
+    //and count occurrences for every make
     const makersCount = listingsArray.reduce((acc, val) => acc.set(val.make, 1 + (acc.get(val.make) || 0)), new Map());
+    //Calculate the total of all available sells
     const totalSells = Array.from(makersCount).map(item => parseInt(item[1])).reduce((acc, val) => acc + val, 0);
     Array.from(makersCount).forEach((element, index) => {
         const percentItem = {
@@ -41,6 +47,7 @@ const carTypesPercent = () => {
         };
         percentSells.push(percentItem);
     });
+    //Sort the array by percentage - descending from greater to lower
     return percentSells.sort((a, b) => b.percent - a.percent);
 };
 const getAvaragePriceAndPercentage = (req, res) => {
